@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Permission;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
+use App\Models\Role;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
-class PermissionController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +17,13 @@ class PermissionController extends Controller
      */
     public function index()
     {
-       $permissions = Permission::latest() ->get();
-        return view('admin.pages.user.permission.index', [
-            'all_permission'    => $permissions,
-            'form_type'         => 'create'
+        $all_data = Admin::latest() -> get();
+        $roles = Role::latest() -> get();
+        return view('admin.pages.user.index', [
+            'all_data'      => $all_data,
+            'form_type'     => 'create',
+            'roles'         => $roles
+
         ]);
     }
 
@@ -41,16 +45,33 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-       $this -> validate( $request, [
-        'name'  => 'required|unique:permissions'
-       ]);
+        $this -> validate($request,[
 
-       Permission::create([
-        'name'      => $request -> name,
-        'slug'      => Str::slug($request -> name),
-       ]);
+            'name'              => ['required'],
+            'email'             => ['required', 'unique:admins'],
+            'cell'              => ['required', 'unique:admins'],
+            'username'          => ['required', 'unique:admins'],
+        ]);
 
-       return back() -> with('success', 'Permission added successful');
+
+        //genarete password
+
+        $pass_string = str_shuffle('0123456789ABCD');
+        $pass = substr($pass_string, 3, 6);
+        //data send
+
+        Admin::create([
+
+            'name'      => $request -> name,
+            'email'     => $request -> email,
+            'cell'      => $request -> cell,
+            'username'  => $request -> username,
+            'password'  => Hash::make($pass),
+
+        ]);
+
+        return back() -> with('success','Admin user created!');
+
     }
 
     /**
@@ -72,13 +93,7 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        $permissions = Permission::latest() ->get();
-        $per = Permission::findOrfail($id);
-        return view('admin.pages.user.permission.index', [
-            'all_permission'    => $permissions,
-            'form_type'         => 'edit',
-            'edit'               => $per
-        ]);
+        //
     }
 
     /**
@@ -90,15 +105,7 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $update_data = Permission::findOrfail($id);
-        $update_data -> update([
-            'name'      => $request -> name,
-            'slug'      => Str::slug($request -> name),
-           ]);
-    
-           return back() -> with('success', 'Permission updated successful');
-
-
+        //
     }
 
     /**
@@ -109,9 +116,6 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //Delete Method
-        $delete = Permission::findOrFail($id);
-        $delete -> delete();
-        return back() -> with('danger-main', 'Permission delete successful');
+        //
     }
 }

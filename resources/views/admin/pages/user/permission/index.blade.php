@@ -6,11 +6,12 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">All Permission</h4>
+                    <h4 class="card-title">All Permission</h4> 
+                    @include('validate-main')
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table mb-0">
+                        <table class="table mb-0 data-table-search">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -28,11 +29,15 @@
                                     <td>{{$loop -> index + 1}}</td>
                                     <td>{{$per -> name}}</td>
                                     <td>{{$per -> slug}}</td>
-                                    <td>{{$per -> created_at}}</td>
+                                    <td>{{$per -> created_at -> diffForHumans()}}</td>
                                     <td>
-                                        <a class="btn btn-sm btn-info" href="#"><i class="fa fa-eye"></i></a>
-                                        <a class="btn btn-sm btn-warning" href="#"><i class="fa fa-edit"></i></a>
-                                        <a class="btn btn-sm btn-danger" href="#"><i class="fa fa-trash"></i></a>
+                                     {{-- <a class="btn btn-sm btn-info" href="#"><i class="fa fa-eye"></i></a> --}}
+                                        <a class="btn btn-sm btn-warning" href="{{route('permission.edit', $per -> id)}}"><i class="fa fa-edit"></i></a>
+                                        <form action="{{route('permission.destroy', $per -> id)}}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger" href="#"><i class="fa fa-trash"></i></button>
+                                        </form>
                                     </td>
                                 </tr>
 
@@ -51,24 +56,52 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Add New Permission</h4>
+
+            @if ($form_type == 'create')
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Add New Permission</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{route('permission.store')}}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                @include('validate')
+                                <label>Name</label>
+                                <input name="name" type="text" class="form-control">
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form action="{{route('permission.store')}}" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            @include('validate')
-                            <label>Name</label>
-                            <input name="name" type="text" class="form-control">
-                        </div>
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
+            @endif
+
+            @if ($form_type == 'edit')
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h4 class="card-title">Edit Permission</h4>
+                        <a class="btn-sm btn-info" href="{{route('permission.index')}}">Back</a>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{route('permission.update', $edit -> id)}}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="form-group">
+                                @include('validate')
+                                <label>Name</label>
+                                <input name="name" type="text" value="{{$edit -> name}}" class="form-control">
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            @endif
+            
+
         </div>
     </div>
     

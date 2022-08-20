@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Role;
+use App\Notifications\AdminAccountInfoNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,13 +18,23 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $all_data = Admin::latest() -> get();
+        $all_data = Admin::latest() -> where('trash', false) -> get();
         $roles = Role::latest() -> get();
         return view('admin.pages.user.index', [
             'all_data'      => $all_data,
             'form_type'     => 'create',
             'roles'         => $roles
 
+        ]);
+    }
+
+
+    public function adminTrashUser()
+    {
+        $all_data = Admin::latest() -> where('trash', true) -> get();
+        return view('admin.pages.user.trash', [
+            'all_data'      => $all_data,
+            'form_type'     => 'trash',
         ]);
     }
 
@@ -60,15 +71,18 @@ class AdminController extends Controller
         $pass = substr($pass_string, 3, 6);
         //data send
 
-        Admin::create([
+        $user = Admin::create([
 
             'name'      => $request -> name,
+            'role_id'   => $request -> role,
             'email'     => $request -> email,
             'cell'      => $request -> cell,
             'username'  => $request -> username,
             'password'  => Hash::make($pass),
 
         ]);
+
+        $user -> notify(new AdminAccountInfoNotification([$user['name'], $pass ]));
 
         return back() -> with('success','Admin user created!');
 
@@ -116,6 +130,51 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $admin_data = Admin::findOrfail($id);
+        $admin_data -> delete();
+
+        return back() -> with('danger-main', 'User delete successful');
     }
+
+    public function adminStatus($id)
+    {
+        $admin_data = Admin::findOrfail($id);
+
+        if ($admin_data -> status) {
+            $admin_data -> update([
+                'status'    => false
+            ]);
+
+        }else{
+            $admin_data -> update([
+                'status'    => true
+            ]);
+        }
+
+        return back() -> with('success-main', 'Status Update Successful');
+
+    }
+
+
+    //Trash Update
+
+    public function adminTrash($id)
+    {
+        $admin_data = Admin::findOrfail($id);
+        if ($admin_data -> trash) {
+            $admin_data -> update([
+                'trash'    => false
+            ]);
+
+        }else{
+            $admin_data -> update([
+                'trash'    => true
+            ]);
+        }
+
+        return back() -> with('success-main', 'Trash Update Successful');
+
+    }
+
+
 }

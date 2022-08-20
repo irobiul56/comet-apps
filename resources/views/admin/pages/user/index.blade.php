@@ -5,10 +5,12 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">All Permission</h4> 
-                    @include('validate-main')
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Active Users</h4> 
+                    <a href="{{route('admin.trash.user')}}" class="btn btn-sm btn-danger">Trash User <i class="fa fa-arrow-right"></i></a>
+
                 </div>
+                @include('validate-main')
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table mb-0 data-table-search">
@@ -19,6 +21,7 @@
                                     <th>Role</th>
                                     <th>Photo</th>
                                     <th>Created At</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -29,7 +32,7 @@
                                         <tr>
                                             <td>{{$loop -> index + 1}}</td>
                                             <td>{{$item -> name}}</td>
-                                            <td>{{$item -> role_id}}</td>
+                                            <td>{{$item -> role -> name}}</td>
                                             <td>
                                             
                                                 @if ($item -> photo == 'avater.png')
@@ -39,13 +42,31 @@
                                             </td>
                                             <td>{{$item -> created_at -> diffForHumans()}}</td>
                                             <td>
-                                            {{-- <a class="btn btn-sm btn-info" href="#"><i class="fa fa-eye"></i></a> --}}
+
+                                                @if($item -> status)
+                                                    <span class="badge badge-success">Active User</span>
+                                                    <a class="text-danger" href="{{route('admin.status.update', $item -> id)}}"><i class="fa fa-times"></i></a>
+                                                @else
+                                                    <span class="badge badge-danger">Blocked User</span>
+                                                    <a class="text-success" href="{{route('admin.status.update', $item -> id)}}"><i class="fa fa-check"></i></a>
+                                                @endif
+
+                                            </td>
+                                            <td>
+
+                                                
+                                                {{-- <a class="btn btn-sm btn-info" href="#"><i class="fa fa-eye"></i></a> --}}
                                                 <a class="btn btn-sm btn-warning" href="{{route('admin-user.edit', $item -> id)}}"><i class="fa fa-edit"></i></a>
-                                                <form action="{{route('admin-user.destroy', $item -> id)}}" method="POST" class="d-inline">
+
+                                                {{-- Trash --}}
+                                                <a class="btn btn-sm btn-danger" href="{{route('admin.trash.update', $item -> id)}}"><i class="fa fa-trash"></i></a>
+
+
+                                                {{-- <form action="{{route('admin-user.destroy', $item -> id)}}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="btn btn-sm btn-danger" href="#"><i class="fa fa-trash"></i></button>
-                                                </form>
+                                                </form> --}}
                                             </td>
                                         </tr>   
                                     @endif
@@ -98,7 +119,7 @@
                               <select name="role" id="" class="form-control">
                                     <option value="">-- Select --</option>
                                  @foreach ($roles as $role)
-                                     <option value="">{{$role -> name}}</option>
+                                     <option value="{{$role -> id}}">{{$role -> name}}</option>
                                  @endforeach
                               </select>
                             </div>

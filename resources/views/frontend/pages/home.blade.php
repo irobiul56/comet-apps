@@ -7,38 +7,36 @@
     <!-- Home Slider-->
     <div id="home-slider" class="flexslider">
       <ul class="slides">
+
+        @foreach ($sliders as $slide)
         <li>
-          <img src="frontend/images/bg/1.jpg" alt="">
+          <img src="{{url('storage/sliders/'.  $slide -> photo )}}" alt="">
           <div class="slide-wrap">
             <div class="slide-content">
               <div class="container">
-                <h1>Digital Power<span class="red-dot"></span></h1>
-                <h6>We are a small design studio from San Francisco.</h6>
-                <p><a href="#" class="btn btn-light-out">Read More</a><a href="#" class="btn btn-color btn-full">Services</a>
+                <h1>{{$slide -> title}}<span class="red-dot"></span></h1>
+                <h6>{{ $slide -> subtitle}}</h6>
+                <p>
+
+                  @foreach (json_decode($slide -> btns) as $btn)
+                    <a href="{{$btn -> btn_link}}" class="btn {{$btn -> btn_type}}">{{$btn -> btn_title}}</a>
+                  @endforeach
+
                 </p>
               </div>
             </div>
           </div>
         </li>
-        <li>
-          <img src="frontend/images/bg/2.jpg" alt="">
-          <div class="slide-wrap">
-            <div class="slide-content">
-              <div class="container">
-                <h1>We Are Comet<span class="red-dot"></span></h1>
-                <h6>Experts in web design and development.</h6>
-                <p><a href="#" class="btn btn-color">Explore</a><a href="#" class="btn btn-light-out">Join us</a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </li>
+        @endforeach
+        
+
       </ul>
     </div>
     <!-- End Home Slider-->
 </section>
   <!-- End Home Section-->
 
+  
     @include('frontend.pages.section.about')
     @include('frontend.pages.section.expertise')
     @include('frontend.pages.section.vision')

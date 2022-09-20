@@ -12,13 +12,25 @@
 
 							@if (in_array('Slider', json_decode(Auth::guard('admin') -> user() -> role -> permissions)))
                             <li> 
-								<a href="#"><i class="fe fe-desktop"></i> <span>Slider</span></a>
+								<a href="{{route('sliders.index')}}"><i class="fe fe-desktop"></i> <span>Slider</span></a>
+							</li>
+							@endif
+
+							@if (in_array('counter', json_decode(Auth::guard('admin') -> user() -> role -> permissions)))
+                            <li> 
+								<a href="{{route('counter.index')}}"><i class="fe fe-desktop"></i> <span>Counter</span></a>
 							</li>
 							@endif
 
 							@if (in_array('Testimonials', json_decode(Auth::guard('admin') -> user() -> role -> permissions)))
                             <li> 
-								<a href="#"><i class="fe fe-commenting"></i> <span>Testimonials</span></a>
+								<a href="{{route('testimonials.index')}}"><i class="fe fe-commenting"></i> <span>Testimonials</span></a>
+							</li>
+							@endif
+
+							@if (in_array('Expertise', json_decode(Auth::guard('admin') -> user() -> role -> permissions)))
+                            <li> 
+								<a href="#"><i class="fe fe-user"></i> <span>Expertise</span></a>
 							</li>
 							@endif
 

@@ -101,6 +101,9 @@
             <a href="#">Team</a>
           </li>
           <li>
+            <a href="{{route('show.blog.page')}}">Blog</a>
+          </li>
+          <li>
             <a href="#">Service</a>
           </li>
           <li>

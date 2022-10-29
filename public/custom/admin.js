@@ -57,6 +57,32 @@
             $('#select-icon').modal('hide');
         })
 
+        //Gallery
+        $('#gallery-photo').change(function(e){
+            const files = e.target.files;
+            let gallery_ui = '';
+
+            for (let i = 0; i < files.length; i++) {
+               const obj_url = URL.createObjectURL(files[i]);
+                gallery_ui += `<img src= "${ obj_url }">`;
+            }
+
+            $('.port-gall').append(gallery_ui);
+
+
+        });
+
+            ClassicEditor
+                .create( document.querySelector( '#posteditor' ) )
+                .then( editor => {
+                        console.log( editor );
+                } )
+                .catch( error => {
+                        console.error( error );
+                } );
+            
+            
+        $('.comet-select-2').select2();
 
     });
 })(jQuery)

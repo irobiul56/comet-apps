@@ -4149,3 +4149,27 @@ table.table-inbox tbody tr.checked {
 .btn-otp-area input{
 	margin: 10px 0px;
    }
+
+
+
+   .port-gall{
+		display: flex;
+		flex-flow: wrap;
+		gap: 10px;
+		justify-content: center;
+   }
+
+   .port-gall img{
+		width: 150px;
+		height: 150px;
+		object-fit: cover;
+   }
+
+   .portfolio-steps{
+	margin: 5px 0px;
+   }
+
+
+   .ck-editor__editable {
+	min-height: 300px;
+}

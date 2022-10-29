@@ -36,7 +36,7 @@
 
 							@if (in_array('Clients', json_decode(Auth::guard('admin') -> user() -> role -> permissions)))
                             <li> 
-								<a href="#"><i class="fe fe-user"></i> <span>Our Clients</span></a>
+								<a href="{{route('client.index')}}"><i class="fe fe-user"></i> <span>Our Clients</span></a>
 							</li>
 							@endif
 
@@ -45,9 +45,8 @@
                                 <li class="submenu">
                                     <a href="#"><i class="fe fe-beginner"></i> <span> Protfolio</span> <span class="menu-arrow"></span></a>
                                     <ul style="display: none;">
-                                        <li><a href="#">Protfolio</a></li>
-                                        <li><a href="#">Tag</a></li>
-                                        <li><a href="#">Categories</a></li>
+                                        <li><a href="{{route('portfolio.index')}}">Protfolio</a></li>
+                                        <li><a href="{{route('category-portfolio.index')}}">Categories</a></li>
                                     </ul>
                                 </li>
 							</li>
@@ -62,9 +61,19 @@
 							<li class="submenu">
 								<a href="#"><i class="fe fe-document"></i> <span> Posts</span> <span class="menu-arrow"></span></a>
 								<ul style="display: none;">
-									<li><a href="#">All Posts</a></li>
-									<li><a href="#">Categories</a></li>
-									<li><a href="#">Tag</a></li>
+									<li><a href="{{route('show.all.post')}}">All Posts</a></li>
+									<li><a href="{{route('category-post.index')}}">Categories</a></li>
+									<li><a href="{{route('tag.index')}}">Tag</a></li>
+								</ul>
+							</li>
+							@endif
+							@if (in_array('Product', json_decode(Auth::guard('admin') -> user() -> role -> permissions)))
+							<li class="submenu">
+								<a href="#"><i class="fe fe-document"></i> <span> Product</span> <span class="menu-arrow"></span></a>
+								<ul style="display: none;">
+									<li><a href="#">All Product</a></li>
+									<li><a href="{{route('product-category.index')}}">Categories</a></li>
+									<li><a href="{{route('product-tag.index')}}">Tag</a></li>
 								</ul>
 							</li>
 							@endif

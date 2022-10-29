@@ -79,6 +79,8 @@
 		
 		<!-- Slimscroll JS -->
         <script src="{{asset('admin/assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 		
 		<script src="{{asset('admin/assets/plugins/raphael/raphael.min.js')}}"></script>    
 		<script src="{{asset('admin/assets/plugins/morris/morris.min.js')}}"></script>  
@@ -86,6 +88,13 @@
 
 		<!--Searcing javascript-->
 		<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.12.1/datatables.min.js"></script>
+
+		{{-- CK Editor --}}
+		<script src="https://cdn.ckeditor.com/ckeditor5/35.2.0/classic/ckeditor.js"></script>
+
+		{{-- Select2 --}}
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 		
 		<!-- Custom JS -->
 		<script  src="{{asset('admin/assets/js/script.js')}}"></script>
